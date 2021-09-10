@@ -17,4 +17,20 @@ router.get('/', (req, res) => {
         });
 });
 
+router.post('/', (req, res) => {
+    let newListItem = req.body;
+    console.log(`Adding book`, newListItem);
+
+    let queryText = `INSERT INTO "list" ("note", "category", "priority", "isComplete", "timeCompleted")
+                   VALUES ($1, $2, $3, $4, $5);`;
+    pool.query(queryText, [newListItem.note, newListItem.category, newListItem.priority, newListItem.isComplete, newListItem.timeCompleted])
+        .then(result => {
+            res.sendStatus(201);
+        })
+        .catch(error => {
+            console.log(`Error adding new book`, error);
+            res.sendStatus(500);
+        });
+});
+
 module.exports = router; //export appropriate route to server.js
