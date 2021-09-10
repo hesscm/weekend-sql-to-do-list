@@ -1,6 +1,6 @@
 const pg = require('pg');
 
-//for mac with homebrew
+//for mac with homebrew and postico
 // const config = {
 //     database: 'weekend-to-do-app',
 //     host: 'localhost',
@@ -9,7 +9,7 @@ const pg = require('pg');
 //     idleTimeoutMillis: 30000
 // };
 
-//for windows
+//for windows with pgAdmin4
 const config = {
     user: 'postgres', // Add db user
     host: 'localhost',

@@ -5,10 +5,15 @@ const router = express.Router();
 const pool = require('../modules/pool');
 
 router.get('/', (req, res) => {
-    res.status(200).send('Hello');
-})
-// .catch(error => {
-//         console.log('Error while getting list.', error);
-//         res.sendStatus(500);
-//     });
+    let queryText = 'SELECT * FROM "list" ORDER BY "priority" ASC;';
+    pool.query(queryText).then(result => {
+        // Sends back the results in an object
+        res.send(result.rows);
+    })
+        .catch(error => {
+            console.log('error getting books', error);
+            res.sendStatus(500);
+        });
+});
+
 module.exports = router;
