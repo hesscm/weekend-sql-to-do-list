@@ -1,19 +1,20 @@
-const { application } = require('express');
-const express = require('express');
-const router = express.Router();
+const express = require('express'); //bring in express
+const router = express.Router(); //establish router method
 
-const pool = require('../modules/pool');
+//bring in pool to allow connection to database
+const pool = require('../modules/pool'); 
 
+//get table from database or display an error
 router.get('/', (req, res) => {
     let queryText = 'SELECT * FROM "list" ORDER BY "priority" ASC;';
     pool.query(queryText).then(result => {
         // Sends back the results in an object
-        res.send(result.rows);
+        res.status(200).send(result.rows);
     })
         .catch(error => {
             console.log('error getting books', error);
-            res.sendStatus(500);
+            res.sendStatus(500); //throw error
         });
 });
 
-module.exports = router;
+module.exports = router; //export appropriate route to server.js

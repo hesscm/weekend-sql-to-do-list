@@ -14,6 +14,7 @@ VALUES
 INSERT INTO "list" 
 	("note", "category", "priority", "isComplete") 
 VALUES 
-	('Complete to-do list assignment', 'School', 1, false);
+	('Complete to-do list assignment', 'School', 1, false),
+    ('Take kids to the playground', 'Personal', 2, false);
 
 SELECT * FROM "list";
