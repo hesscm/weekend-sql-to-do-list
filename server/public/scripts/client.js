@@ -9,6 +9,11 @@ function readyNow() {
 
 function handleClickEvents() {
     $('#submit-button').on('click', postListToServer);
+    $('#to-do-list').on('click', '.complete-button', putMarkComplete);
+}
+
+function putMarkComplete() {
+console.log($(this).data('id'));
 }
 
 function postListToServer() {
@@ -62,6 +67,7 @@ function appendListToDom(list) {
             <td>${list[i].priority}</td>
             <td>${isComplete}</td>
             <td>${list[i].timeCompleted}</td>
+            <td><button class="complete-button" data-id="${list[i].id}">Mark Complete</button</td>
         </tr>
         `)
     }
