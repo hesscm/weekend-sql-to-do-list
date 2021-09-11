@@ -5,11 +5,12 @@ body {
 table {
   border-collapse: collapse;
   width: 100%;
+
 }
 
 th, td {
   text-align: left;
-  padding: 8px;
+  padding: 4px;
   border-bottom: 1px solid rgb(75, 54, 54);
 }
 

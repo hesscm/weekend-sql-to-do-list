@@ -6,9 +6,10 @@ const pool = require('../modules/pool');
 
 //get table from database or display an error
 router.get('/', (req, res) => {
-    let queryText = 'SELECT * FROM "list" ORDER BY "priority" ASC;';
+    let queryText = 'SELECT * FROM "list" ORDER BY "id" ASC;';
     pool.query(queryText).then(result => {
         // Sends back the results in an object
+        console.log(result.rows);
         res.status(200).send(result.rows);
     })
         .catch(error => {
@@ -35,8 +36,15 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
     let reqId = req.params.id;
+    let sqlText = '';
     console.log('Put request for id', reqId);
-    let sqlText = 'UPDATE "list" SET "isComplete" = true WHERE "id" = $1;'
+    if (req.body.isComplete === 'true') {
+        sqlText = 'UPDATE "list" SET "isComplete" = false WHERE "id" = $1;'
+    }
+    else {
+        sqlText = 'UPDATE "list" SET "isComplete" = true WHERE "id" = $1;'
+    }
+    // let sqlTextifTrue = 'UPDATE "list" SET "isComplete" = false WHERE "id" = $1;'
     pool.query(sqlText, [reqId])
         .then((result) => {
             console.log('List updated');

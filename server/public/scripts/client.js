@@ -11,7 +11,26 @@ function handleClickEvents() {
     $('#submit-button').on('click', postListToServer);
     $('#to-do-list').on('click', '.complete-button', putMarkComplete);
     $('#to-do-list').on('click', '.delete-button', deleteListItem);
+    $('#to-do-list').on('click', '.form-check-input', toggleChange);
 
+}
+
+function toggleChange() {
+    console.log('in toggleChange', $(this).data('id'));
+    console.log($(this).data('is-complete'));
+
+    $.ajax({
+        method: 'PUT',
+        url: `/list/${$(this).data('id')}`,
+        data: {isComplete: $(this).data('is-complete')}
+    })
+        .then(function (response) {
+            console.log('Updated it!');
+            getListItems();
+        })
+        .catch(function (error) {
+            alert('Error on put.', error);
+        })
 }
 
 function deleteListItem() {
@@ -83,21 +102,26 @@ function appendListToDom(list) {
     console.table(list);
     //variables to track item completion
     let isComplete = '';
-    let addCheckMark = ''; 
+    let addCheckMark = '';
+    let toggleSwitch ='';
 
     $('#to-do-list').empty(); //empty the list on DOM
     
     //iterate through the list
     for (let i = 0; i < list.length; i++) {
+        console.log('in loop', list[i].isComplete);
         //if this item is completed...
         if (list[i].isComplete === true) {
-            isComplete = 'Yes' //text to appear on DOM
+            isComplete = '&check;' //text to appear on DOM
             completeClass = 'isComplete'; //CSS class to change style
             addCheckMark = '&check;' //HTML entity code for a checkmark
+            toggleSwitch = `<input class="form-check-input" type="checkbox" data-is-complete="${list[i].isComplete}" data-id="${list[i].id}" checked>`;
         } else {
-            isComplete = 'No';
+            isComplete = '';
             completeClass = 'isNotComplete';
             addCheckMark = '';
+            toggleSwitch = `<input class="form-check-input" type="checkbox" data-is-complete="${list[i].isComplete}" data-id="${list[i].id}">`;
+
         }
         //append list to DOM
         $('#to-do-list').append(`
@@ -107,12 +131,12 @@ function appendListToDom(list) {
             <td>${list[i].priority}</td>
             <td>${isComplete}</td>
             <td>${list[i].timeCompleted}</td>
-            <td>${addCheckMark}
-                <button class="complete-button" data-id="${list[i].id}">Mark Complete</button
+            <td>
+                <div class="form-check form-switch">${toggleSwitch}</div>
             </td>
             <td>
                 <button class="delete-button" data-id="${list[i].id}">Delete Item</button
-                </td>
+            </td>
         </tr>
         `)
     }
