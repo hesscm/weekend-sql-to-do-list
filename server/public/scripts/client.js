@@ -21,13 +21,6 @@ function postListToServer() {
         timeCompleted: $('#input-timeCompleted').val(),
     };
     console.log(newListItem);
-    if (newListItem.isComplete.toUpperCase() ==='YES') {
-        newListItem.isComplete = true;
-    } else if (newListItem.isComplete.toUpperCase() === 'NO') {
-        newListItem.isComplete = false;
-    } else {
-    alert('Please enter "yes" or "no".');   
-    }
     $.ajax({
         method: 'POST',
         url: '/list',

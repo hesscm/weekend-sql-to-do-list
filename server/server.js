@@ -1,5 +1,7 @@
 const express = require('express');
 const listRouter = require('./routes/list.router');
+//declare port # and prepare for Heroku deployment
+const PORT = process.env.PORT || 5000;
 
 const app = express(); //create the app
 
@@ -14,11 +16,7 @@ app.use(express.static('server/public'));
 
 
 
-
-
-
-//establish port # and begin listening
-const PORT = process.env.PORT || 5000; //eventually used for Heroku deployment
+//begin listening
 app.listen(PORT, () => {
     console.log('Running on Port:', PORT);
 });

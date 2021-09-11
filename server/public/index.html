@@ -13,9 +13,19 @@
     <header><h1>To-Do List</h1></header>
     <input type="text" id="input-note" placeholder="What To Do?">
     <input type="text" id="input-category" placeholder="Category">
-    <input type="number" id="input-priority" placeholder="Priority(1-5)">
-    <input type="text" id="input-isComplete" placeholder="Is this task finished?">
-    <input type="text" id="input-timeCompleted" placeholder="When did you do it?">
+    <label for="input-priority">Priority:</label>
+    <select type="number" id="input-priority">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <select type="number" id="input-isComplete">
+        <option value="false" selected>Task Not Complete</option>
+        <option value="true" selected>Task Complete</option>
+    </select>
+    <input type="datetime-local" id="input-timeCompleted" placeholder="When did you do it?">
     <button id="submit-button">Add To-Do</button>
 
     <div>
