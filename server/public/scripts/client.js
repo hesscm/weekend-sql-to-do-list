@@ -30,6 +30,7 @@ function getListItems() {
 //send a new list item to the server
 function postListToServer() {
     console.log('in postListToServer');
+    $('input').val(''); //empty fields
     //object to hold values from the DOM
     let newListItem = { 
         note: $('#input-note').val(),

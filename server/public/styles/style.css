@@ -1,23 +1,33 @@
 header {
   text-align: center;
+  color: #000000;
 }
 
 body {
-    background-color: rgb(205, 207, 191);
+  background-color: #484a47;
+  background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
 }
 
 #input-form, #sort-form {
   text-align: center;
 }
 
+button {
+  background-color: #8d818c
+}
+
 .delete-button {
   background-color: rgba(216, 55, 55, 0.897);
 }
 
+input, select {
+  background-color: #a5a299;
+}
+
+/* table styling from w3 schools */
 table {
   border-collapse: collapse;
   width: 100%;
-
 }
 
 th, td {
@@ -30,5 +40,5 @@ th, td {
 #to-do-list tr:hover {background-color: aliceblue;}
 
 .isComplete {
-  background-color: rgb(50, 112, 42);
+  background-color: #e0efde;
 }
