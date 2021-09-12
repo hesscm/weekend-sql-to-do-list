@@ -6,6 +6,14 @@ body {
     background-color: rgb(205, 207, 191);
 }
 
+#input-form, #sort-form {
+  text-align: center;
+}
+
+.delete-button {
+  background-color: rgba(216, 55, 55, 0.897);
+}
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -24,6 +32,3 @@ th, td {
 .isComplete {
   background-color: rgb(50, 112, 42);
 }
-
-/* .isNotComplete {
-} */

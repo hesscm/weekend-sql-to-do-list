@@ -8,27 +8,61 @@ function readyNow() {
 }
 
 function handleClickEvents() {
-    $('#submit-button').on('click', postListToServer);
-    $('#to-do-list').on('click', '.complete-button', putMarkComplete);
-    $('#to-do-list').on('click', '.delete-button', sweetAlertForDelete);
-    $('#to-do-list').on('click', '.form-check-input', toggleChangePut);
-    $('#sort-button').on('click', getAndSortByOption);
+    $('#submit-button').on('click', postListToServer); //submit list to server
+    $('#to-do-list').on('click', '.delete-button', sweetAlertForDelete); //check before item deletion
+    $('#to-do-list').on('click', '.form-check-input', toggleChangePut); //mark complete or incomplete
+    $('#sort-button').on('click', getAndSortByOption); //sort feature
 }
 
-//I WANTED TO MAKE THIS A GET!! could not send "data" property with GET
-//take sort option and send it to the server to return the results
-function getAndSortByOption() {
-    let option = $('#input-sort').val(); //option is based on the input
-    console.log('option:', option);
+//get list from the server
+function getListItems() {
+    console.log('in getListItems');
+    $.ajax({
+        method: 'GET',
+        url: '/list'
+    }).then(function (serverResponse) {
+        appendListToDom(serverResponse); //send list array to a function
+    }).catch(function (error) {
+        console.log('error in client GET', error);
+    });
+}
+
+//send a new list item to the server
+function postListToServer() {
+    console.log('in postListToServer');
+    //object to hold values from the DOM
+    let newListItem = { 
+        note: $('#input-note').val(),
+        category: $('#input-category').val(),
+        priority: $('#input-priority').val(),
+    };
+    console.log(newListItem);
     $.ajax({
         method: 'POST',
-        url: '/list/sort',
-        data: {option: $('#input-sort').val()} //payload
-    }).then(function (serverResponse) { //receive sorted array
-        console.table(serverResponse);
-        console.log('sort get success');
-        appendListToDom(serverResponse); //append list to DOM
+        url: '/list',
+        data: newListItem,
+    }).then(function (serverResponse) {
+        console.log(serverResponse);
+        getListItems(); //refresh DOM
     })
+}
+
+//send PUT call to the server to change task complete status to true or false
+function toggleChangePut() {
+    // console.log('in toggleChange', $(this).data('id'));
+    // console.log($(this).data('is-complete'));
+    $.ajax({
+        method: 'PUT',
+        url: `/list/${$(this).data('id')}`, //the id of this row
+        data: { isComplete: $(this).data('is-complete') } //the completion status of this row
+    })
+        .then(function (response) {
+            console.log('Updated it!');
+            getListItems(); //refresh DOM
+        })
+        .catch(function (error) {
+            alert('Error on put.', error);
+        })
 }
 
 //Check to ensure the user wants to delete, if so, then send ajax call and delete
@@ -61,7 +95,7 @@ function sweetAlertForDelete() {
                     .catch(function (error) { //catch error is ajax call fails
                         alert('Error on delete.', error);
                     })
-                    //show confirmation
+                //show confirmation
                 swal("Poof! Your To-Do has been deleted!", {
                     icon: "success",
                 });
@@ -69,81 +103,31 @@ function sweetAlertForDelete() {
                 swal("Your To-Do is safe!");
             }
         });
-} 
-
-
-//send PUT call to the server to change task complete status to true or false
-function toggleChangePut() {
-    console.log('in toggleChange', $(this).data('id'));
-    console.log($(this).data('is-complete'));
-
-    $.ajax({
-        method: 'PUT',
-        url: `/list/${$(this).data('id')}`,
-        data: {isComplete: $(this).data('is-complete')}
-    })
-        .then(function (response) {
-            console.log('Updated it!');
-            getListItems();
-        })
-        .catch(function (error) {
-            alert('Error on put.', error);
-        })
 }
 
-function putMarkComplete() {
-    console.log('in putMarkComplete', $(this).data('id'));
-    
-    $.ajax({
-        method: 'PUT',
-        url: `/list/${$(this).data('id')}`
-    })
-        .then(function (response) {
-            console.log('Updated it!');
-            getListItems();
-        })
-        .catch(function (error) {
-            alert('Error on put.', error);
-        })
-}
-
-function postListToServer() {
-    console.log('in postListToServer');
-    let newListItem = {
-        note: $('#input-note').val(),
-        category: $('#input-category').val(),
-        priority: $('#input-priority').val(),
-        isComplete: $('#input-isComplete').val(),
-        timeCompleted: $('#input-timeCompleted').val(),
-    };
-    console.log(newListItem);
+//I WANTED TO MAKE THIS A GET!! could not send "data" property with GET
+//take sort option and send it to the server to return the results
+function getAndSortByOption() {
+    let option = $('#input-sort').val(); //option is based on the input
+    console.log('option:', option);
     $.ajax({
         method: 'POST',
-        url: '/list',
-        data: newListItem,
-    }).then(function(serverResponse){
-        console.log(serverResponse);
-        getListItems();
+        url: '/list/sort',
+        data: {option: $('#input-sort').val()} //payload
+    }).then(function (serverResponse) { //receive sorted array
+        console.table(serverResponse);
+        console.log('sort get success');
+        appendListToDom(serverResponse); //append list to DOM
     })
 }
 
-function getListItems() {
-    console.log('in getListItems');
-    $.ajax({
-        method: 'GET',
-        url: '/list'
-    }).then(function(serverResponse) {
-        appendListToDom(serverResponse);
-    }).catch(function(error){
-        console.log('error in client GET', error);
-    });
-}
-
+//append the retrieved list to the DOM
+//Note: toggle is taken from bootstrap styling
 function appendListToDom(list) {
     console.table(list);
+    console.log(list[0].timeCompleted);
     //variables to track item completion
     let isComplete = '';
-    let addCheckMark = '';
     let toggleSwitch ='';
     let timeCompleted ='';
 
@@ -151,21 +135,20 @@ function appendListToDom(list) {
     
     //iterate through the list
     for (let i = 0; i < list.length; i++) {
-        console.log('in loop', list[i].isComplete);
         //if this item is completed...
         if (list[i].isComplete === true) {
-            isComplete = '&check;' //text to appear on DOM
+            isComplete = '&check;' //HTML entity code for a checkmark
             completeClass = 'isComplete'; //CSS class to change style
-            addCheckMark = '&check;' //HTML entity code for a checkmark
             timeCompleted = list[i].timeCompleted;
+            //toggle is checked and has this data attached
             toggleSwitch = `<input class="form-check-input" type="checkbox" data-is-complete="${list[i].isComplete}" data-id="${list[i].id}" checked>`;
-        } else {
-            timeCompleted = '';
+        } else { //if item is NOT complete...
+            //keep these fields empty
+            timeCompleted = ''; 
             isComplete = '';
-            completeClass = 'isNotComplete';
-            addCheckMark = '';
+            completeClass = '';
+            //toggle is unchecked and has this data attached
             toggleSwitch = `<input class="form-check-input" type="checkbox" data-is-complete="${list[i].isComplete}" data-id="${list[i].id}">`;
-            
         }
         //append list to DOM
         $('#to-do-list').append(`
@@ -184,6 +167,4 @@ function appendListToDom(list) {
         </tr>
         `)
     }
-
-
 }
