@@ -30,8 +30,20 @@
         <option value="false" selected>Task Not Complete</option>
         <option value="true">Task Complete</option>
     </select>
+
     <input type="datetime-local" id="input-timeCompleted" placeholder="When did you do it?">
     <button id="submit-button">Add To-Do</button>
+    <label for="input-sort">Sort By</label>
+    <select id="input-sort">
+        <option value="isComplete">Completed Status</option>
+        <option value="id">Newest</option>
+        <option value="priority">Priority</option>
+        <option value="category">Category</option>
+
+        <option value="timeCompleted">Time Completed</option>
+        <option value="reversed">Oldest</option>
+    </select>
+    <button id="sort-button">Sort</button>
 
     <div>
         <h3>List</h3>

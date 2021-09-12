@@ -12,6 +12,23 @@ function handleClickEvents() {
     $('#to-do-list').on('click', '.complete-button', putMarkComplete);
     $('#to-do-list').on('click', '.delete-button', sweetAlertForDelete);
     $('#to-do-list').on('click', '.form-check-input', toggleChangePut);
+    $('#sort-button').on('click', getAndSortByOption);
+}
+
+//I WANTED TO MAKE THIS A GET!! could not send "data" property with GET
+//take sort option and send it to the server to return the results
+function getAndSortByOption() {
+    let option = $('#input-sort').val(); //option is based on the input
+    console.log('option:', option);
+    $.ajax({
+        method: 'POST',
+        url: '/list/sort',
+        data: {option: $('#input-sort').val()} //payload
+    }).then(function (serverResponse) { //receive sorted array
+        console.table(serverResponse);
+        console.log('sort get success');
+        appendListToDom(serverResponse); //append list to DOM
+    })
 }
 
 //Check to ensure the user wants to delete, if so, then send ajax call and delete
@@ -128,6 +145,7 @@ function appendListToDom(list) {
     let isComplete = '';
     let addCheckMark = '';
     let toggleSwitch ='';
+    let timeCompleted ='';
 
     $('#to-do-list').empty(); //empty the list on DOM
     
@@ -139,13 +157,15 @@ function appendListToDom(list) {
             isComplete = '&check;' //text to appear on DOM
             completeClass = 'isComplete'; //CSS class to change style
             addCheckMark = '&check;' //HTML entity code for a checkmark
+            timeCompleted = list[i].timeCompleted;
             toggleSwitch = `<input class="form-check-input" type="checkbox" data-is-complete="${list[i].isComplete}" data-id="${list[i].id}" checked>`;
         } else {
+            timeCompleted = '';
             isComplete = '';
             completeClass = 'isNotComplete';
             addCheckMark = '';
             toggleSwitch = `<input class="form-check-input" type="checkbox" data-is-complete="${list[i].isComplete}" data-id="${list[i].id}">`;
-
+            
         }
         //append list to DOM
         $('#to-do-list').append(`
@@ -154,7 +174,7 @@ function appendListToDom(list) {
             <td>${list[i].category}</td>
             <td>${list[i].priority}</td>
             <td>${isComplete}</td>
-            <td>${list[i].timeCompleted}</td>
+            <td>${timeCompleted}</td>
             <td>
                 <div class="form-check form-switch">${toggleSwitch}</div>
             </td>

@@ -6,10 +6,39 @@ const pool = require('../modules/pool');
 
 //get table from database or display an error
 router.get('/', (req, res) => {
-    let queryText = 'SELECT * FROM "list" ORDER BY "id" ASC;';
+    let queryText = 'SELECT * FROM "list" ORDER BY "isComplete" ASC;';
     pool.query(queryText).then(result => {
         // Sends back the results in an object
-        console.log(result.rows);
+        res.status(200).send(result.rows);
+    })
+        .catch(error => {
+            console.log('error getting books', error);
+            res.sendStatus(500); //throw error
+        });
+});
+
+//POST for sort option so we can transfer data from client to server
+//sorts the return based on user request
+router.post('/sort', (req, res) => {
+    //identify allowed sorting options
+    let sortOptions = ["id", "priority", "category", "isComplete", "timeCompleted", "reversed"];
+    let option = '"id" ASC;'; //id by default so program doesn't break
+    console.log("server sort get", req.body.option);
+    //loop through sortOptions and try and find match to the request
+    for (let i = 0; i < sortOptions.length; i++) {
+        //reversed does not exist in the database so check this specifically
+        if (req.body.option === sortOptions[5]) {
+            option = '"id" DESC;'; //order by id in a descending order
+        } else if (sortOptions[i] === req.body.option) { //if a match...
+            option = `"${sortOptions[i]}" ASC;`; //sort option is the request
+        }
+    }
+    //set query for database
+    let queryText = `SELECT * FROM "list" ORDER BY ${option}`;
+    console.log(queryText);
+    //send query to database
+    pool.query(queryText).then(result => {
+        // Sends back the results in an object
         res.status(200).send(result.rows);
     })
         .catch(error => {
@@ -70,16 +99,5 @@ router.delete('/:id', (req, res) => {
             res.sendStatus(500);
         })
 })
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router; //export appropriate route to server.js
