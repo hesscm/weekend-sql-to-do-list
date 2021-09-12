@@ -10,12 +10,53 @@ function readyNow() {
 function handleClickEvents() {
     $('#submit-button').on('click', postListToServer);
     $('#to-do-list').on('click', '.complete-button', putMarkComplete);
-    $('#to-do-list').on('click', '.delete-button', deleteListItem);
-    $('#to-do-list').on('click', '.form-check-input', toggleChange);
-
+    $('#to-do-list').on('click', '.delete-button', sweetAlertForDelete);
+    $('#to-do-list').on('click', '.form-check-input', toggleChangePut);
 }
 
-function toggleChange() {
+//Check to ensure the user wants to delete, if so, then send ajax call and delete
+//I wanted to break this into 2 functions but this is the only way I could get it to work
+//Source: https://sweetalert.js.org/guides/
+function sweetAlertForDelete() {
+    //show alert
+    swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this To-Do!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        //take response from user action and use it as a parameter in this function
+        .then((willDelete) => {
+            if (willDelete) { //if delete confirmed..
+                let thisButton = $(this); //assign button to a variable
+                //begin ajax call to DELETE
+                $.ajax({
+                    method: 'DELETE',
+                    url: `/list/${thisButton.data('id')}`
+                })
+                    //then, remove the row from the DOM and refresh list from the server
+                    .then(function (response) {
+                        console.log('Deleted it!');
+                        thisButton.parent().remove();
+                        getListItems();
+                    })
+                    .catch(function (error) { //catch error is ajax call fails
+                        alert('Error on delete.', error);
+                    })
+                    //show confirmation
+                swal("Poof! Your To-Do has been deleted!", {
+                    icon: "success",
+                });
+            } else { //if delete denied, show confirmation that nothing was deleted
+                swal("Your To-Do is safe!");
+            }
+        });
+} 
+
+
+//send PUT call to the server to change task complete status to true or false
+function toggleChangePut() {
     console.log('in toggleChange', $(this).data('id'));
     console.log($(this).data('is-complete'));
 
@@ -30,23 +71,6 @@ function toggleChange() {
         })
         .catch(function (error) {
             alert('Error on put.', error);
-        })
-}
-
-function deleteListItem() {
-    console.log('in deleteListItem', $(this).data('id'));
-    let thisButton = $(this);
-    $.ajax({
-        method: 'DELETE',
-        url: `/list/${$(this).data('id')}`
-    })
-        .then(function (response) {
-            console.log('Deleted it!');
-            thisButton.parent().remove();
-            getListItems();
-        })
-        .catch(function (error) {
-            alert('Error on delete.', error);
         })
 }
 
