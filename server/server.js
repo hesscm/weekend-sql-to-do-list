@@ -1,3 +1,4 @@
+
 const express = require('express');
 const listRouter = require('./routes/list.router');
 //declare port # and prepare for Heroku deployment
@@ -12,9 +13,6 @@ app.use('/list', listRouter);
 
 //find the public assets readily available to the user
 app.use(express.static('server/public')); 
-
-
-
 
 //begin listening
 app.listen(PORT, () => {

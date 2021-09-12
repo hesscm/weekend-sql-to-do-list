@@ -10,48 +10,45 @@
         integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="styles/style.css">
     <script src="vendors/jquery.js"></script>
+    <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="scripts/client.js"></script>
 </head>
 <body>
     <header><h1>To-Do List</h1></header>
 
-    <input type="text" id="input-note" placeholder="What To Do?">
-    <input type="text" id="input-category" placeholder="Category">
-    <label for="input-priority">Priority:</label>
-    <select type="number" id="input-priority">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-    </select>
-    <select type="number" id="input-isComplete">
-        <option value="false" selected>Task Not Complete</option>
-        <option value="true">Task Complete</option>
-    </select>
-
-    <input type="datetime-local" id="input-timeCompleted" placeholder="When did you do it?">
-    <button id="submit-button">Add To-Do</button>
-    <label for="input-sort">Sort By</label>
-    <select id="input-sort">
-        <option value="isComplete">Completed Status</option>
-        <option value="id">Newest</option>
-        <option value="priority">Priority</option>
-        <option value="category">Category</option>
-
-        <option value="timeCompleted">Time Completed</option>
-        <option value="reversed">Oldest</option>
-    </select>
-    <button id="sort-button">Sort</button>
-
+    <div id="input-form">
+        <input type="text" id="input-note" placeholder="Enter Task">
+        <input type="text" id="input-category" placeholder="List Topic">
+        <label for="input-priority">Priority:</label>
+        <select type="number" id="input-priority">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        <button id="submit-button">Add To-Do</button>
+    </div>
+    <br>
+    <div id="sort-form">
+        <label for="input-sort">Sort By</label>
+        <select id="input-sort">
+            <option value="id">Newest</option>
+            <option value="isComplete">Completed Status</option>
+            <option value="priority">Priority</option>
+            <option value="category">List Topic</option>
+            <option value="timeCompleted">Time Completed</option>
+            <option value="reversed">Oldest</option>
+        </select>
+        <button id="sort-button">Sort</button>
+    </div>
     <div>
-        <h3>List</h3>
         <table>
             <thead>
                 <tr>
-                    <th>Note</th>
-                    <th>Category</th>
+                    <th>Task</th>
+                    <th>List Topic</th>
                     <th>Priority(1-5)</th>
                     <th>Status</th>
                     <th>Time Completed</th>
@@ -63,7 +60,7 @@
             </tbody>
         </table>
     </div>
-    <!-- Bootstrap script/popper -->
+    <!-- Bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
