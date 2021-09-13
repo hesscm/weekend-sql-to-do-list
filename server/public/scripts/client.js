@@ -17,6 +17,7 @@ function handleClickEvents() {
 //get list from the server
 function getListItems() {
     console.log('in getListItems');
+    $('input').val(''); //empty fields
     $.ajax({
         method: 'GET',
         url: '/list'
@@ -30,7 +31,7 @@ function getListItems() {
 //send a new list item to the server
 function postListToServer() {
     console.log('in postListToServer');
-    $('input').val(''); //empty fields
+
     //object to hold values from the DOM
     let newListItem = { 
         note: $('#input-note').val(),
@@ -42,10 +43,14 @@ function postListToServer() {
         method: 'POST',
         url: '/list',
         data: newListItem,
-    }).then(function (serverResponse) {
-        console.log(serverResponse);
-        getListItems(); //refresh DOM
     })
+        .then(function (serverResponse) {
+            console.log(serverResponse);
+            getListItems(); //refresh DOM
+        })
+        .catch(function (error) {
+            alert('Error on get.', error);
+        })
 }
 
 //send PUT call to the server to change task complete status to true or false
@@ -126,7 +131,6 @@ function getAndSortByOption() {
 //Note: toggle is taken from bootstrap styling
 function appendListToDom(list) {
     console.table(list);
-    console.log(list[0].timeCompleted);
     //variables to track item completion
     let isComplete = '';
     let toggleSwitch ='';

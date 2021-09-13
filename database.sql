@@ -8,13 +8,13 @@ CREATE TABLE "list" (
 );
 
 INSERT INTO "list" 
-	("note", "category", "priority", "isComplete", "timeCompleted") 
+	("note", "category", "priority") 
 VALUES 
-	('Take out the garbage', 'Chores', 4, true, '2021-09-09');
-INSERT INTO "list" 
-	("note", "category", "priority", "isComplete") 
-VALUES 
-	('Complete to-do list assignment', 'School', 1, false),
-    ('Take kids to the playground', 'Personal', 2, false);
+	('Take out the garbage', 'Chores', 1),
+	('Cook Dinner', 'Chores', 3),
+	('Fix Up LinkedIn', 'School', 4),
+	('Play with the cats', 'Personal', 5),
+	('Complete to-do list assignment', 'School', 1),
+    ('Take kids to the playground', 'Personal', 2);
 
 SELECT * FROM "list";

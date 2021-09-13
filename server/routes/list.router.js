@@ -47,10 +47,6 @@ router.post('/', (req, res) => {
         });
 });
 
-
-
-
-
 //toggle from is complete to is NOT complete and vice versa
 router.put('/:id', (req, res) => {
     //variable to track current time
@@ -105,9 +101,11 @@ router.post('/sort', (req, res) => {
     for (let i = 0; i < sortOptions.length; i++) {
         //reversed does not exist in the database so check this specifically
         if (req.body.option === sortOptions[5]) {
-            option = '"id" ASC;'; //order by id in a descending order
+            option = '"id" ASC;'; //order by id in a ascending order
+        } else if (req.body.option === sortOptions[0]) {
+            option = '"id" DESC;'; //order by id in a descending order
         } else if (sortOptions[i] === req.body.option) { //if a match...
-            option = `"${sortOptions[i]}" DESC;`; //sort option is the request
+            option = `"${sortOptions[i]}" ASC;`; //sort option is the request
         }
     }
     //set query for database
