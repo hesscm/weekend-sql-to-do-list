@@ -29,6 +29,7 @@ Include one or two screen shots of your project here (optional). Remove if unuse
 2. Ensure that [git is installed](https://git-scm.com/downloads) on your Mac/PC.
 2. Copy the SSH link under 'Code'.
 3. Enter terminal(Mac) or Git Bash(Windows) and in your desired folder, type 'git clone git@github.com:hesscm/weekend-sql-to-do-list.git'.
+4. Copy the information in the 'database.sql' file into your postgresql server and create the database. Some information may need to be adjusted in the server/modules/pool.js config variable to run on your operating system.
 4. Open with your preferred IDE.
 5. You will need node.js installed. In the repo folder, type "npm install" to install all of the included dependencies.
 6. Type "npm start" to get the server running.
@@ -44,7 +45,7 @@ Include one or two screen shots of your project here (optional). Remove if unuse
 
 ## Built With
 
-HTML, CSS, JavaScript, JQuery, Bootstrap, SweetAlert, node.js(with express, moment, and pg)
+HTML, CSS, JavaScript, JQuery, Bootstrap, SweetAlert, Postgresql, node.js(with express, moment, and pg)
 
 ## Acknowledgement
 Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped me to make this application a reality. (Shout out to Chris Black!)
